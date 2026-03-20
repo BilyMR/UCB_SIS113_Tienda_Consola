@@ -7,7 +7,7 @@ namespace Tienda_Consola
         {
             inventario = inv;
         }
-        public void MostrarInventario()
+        private void MostrarInventario()
         {
             Producto[] lista = inventario.ObtenerProductos();
             int total = inventario.ObtenerNumProductos();
@@ -29,7 +29,7 @@ namespace Tienda_Consola
             string nombre = Console.ReadLine();
 
             Console.Write("Categoria: ");
-            string categoria = Console.ReadLine();
+            string codigo = Console.ReadLine();
 
             Console.Write("Precio: ");
             double precio = double.Parse(Console.ReadLine());
@@ -37,20 +37,24 @@ namespace Tienda_Consola
             Console.Write("Stock: ");
             int stock = int.Parse(Console.ReadLine());
 
-            inventario.AgregarProducto(nombre, categoria, precio, stock);
+            inventario.AgregarProducto(nombre, codigo, precio, stock);
             Console.WriteLine("Producto agregado.");
         }
-        public void Menu(Usuario usuario)
+        private void Menu(Usuario usuario)
         {
            int opcion;
             do
             {
                 Console.WriteLine("-------Menu-------");
                 if (usuario.rol.AgregaProducto)
+                {
                     Console.WriteLine("1. Agregar producto");
+                    Console.WriteLine("2. Actualizar producto");
+                    Console.WriteLine("3. Eliminar producto");
+                }
 
-                Console.WriteLine("2. Ver inventario");
-                Console.WriteLine("3. Salir");
+                Console.WriteLine("4. Ver inventario");
+                Console.WriteLine("5. Salir");
 
                 Console.Write("Opcion: ");
                 opcion = int.Parse(Console.ReadLine());
@@ -59,11 +63,18 @@ namespace Tienda_Consola
                 {
                     AgregarProducto();
                 } 
-                else if(opcion == 2)
+                else if(opcion == 2 && usuario.rol.AgregaProducto)
                 {
-                    MostrarInventario();
+                    EliminarProducto();
                 }
-                else if(opcion == 3)
+                else if(opcion == 3 && usuario.rol.AgregaProducto)
+                {
+                    ActualizarProducto();
+                }
+                else if(opcion == 4)
+                {
+                    MostrarInventario();                }
+                else if(opcion == 0)
                 {
                     Console.WriteLine("Bye");
                 }
@@ -71,7 +82,35 @@ namespace Tienda_Consola
                 {
                     Console.WriteLine("Opcion no valida");
                 }
-            } while(opcion != 3);
+            } while(opcion != 0);
+        }
+
+        private void EliminarProducto()
+        {
+            Console.Write("Nombre del producto a eliminar: ");
+            string nombre = Console.ReadLine();
+
+            if (inventario.EliminarProducto(nombre))
+                Console.WriteLine("Producto eliminado.");
+            else
+                Console.WriteLine("Producto no encontrado.");
+        }
+
+        private void ActualizarProducto()
+        {
+            Console.Write("Codigo del producto a actualizar: ");
+            string codigo = Console.ReadLine();
+
+            Console.Write("Nuevo precio: ");
+            double precio = double.Parse(Console.ReadLine());
+
+            Console.Write("Nuevo stock: ");
+            int stock = int.Parse(Console.ReadLine());
+
+            if (inventario.ActualizarProducto(codigo, stock, precio))
+                Console.WriteLine("Producto actualizado.");
+            else
+                Console.WriteLine("Producto no encontrado.");
         }
         public void Iniciar()
         {

@@ -2,10 +2,10 @@ namespace Tienda_Consola
 {
     class Producto
     {
-        private string codigo;
-        private string nombre;
-        private double precio;
-        private int stock;
+        public string codigo{get; set;}
+        public string nombre{get; private set;}
+        public double precio{get; set;}
+        public int stock{get; set;}
         public Producto(string nombre, string codigo, double precio, int stock)
         {
             this.nombre = nombre;
